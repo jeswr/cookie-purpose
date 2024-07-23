@@ -21,8 +21,12 @@ class NestedObject(BaseModel):
 
 # Define the prompt
 prompt_template = PromptTemplate(
-    input_variables=["id"],
-    template="Generate nested object data for id: {id}"
+    input_variables=["name", "category", "description", "purposes", "format_instructions"],
+    partial_variables={
+        "purposes": open('templates/purposes.tsv', 'r').read(),
+        "format_instructions": ""
+      },
+    template=open('templates/prompt.fstring', 'r').read()
 )
 
 # Define the output parser
