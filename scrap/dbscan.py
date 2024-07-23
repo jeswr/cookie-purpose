@@ -10,28 +10,37 @@ from langchain_community.vectorstores import FAISS
 import faiss
 import os
 from sklearn.cluster import DBSCAN
+from sklearn.neighbors import NearestNeighbors
 import numpy as np
+import matplotlib.pyplot as plt
 from requestDebugger import debug_requests_on
 debug_requests_on()
 
 async def main():
-  db = FAISS.from_texts(purposes[:100], embedder)
-  similar = await db.asimilarity_search_with_relevance_scores(purposes[0])
-  print(purposes[0])
-  for s in similar:
-    print('---')
-    print(s)
+  embeddings=np.array(embedder.embed_documents(purposes[:100])).astype('float32')
 
-  # embeddings = embedder.embed_documents(purposes[:100])
+  k = 4  # Typically set k to min_samples
+  neighbors = NearestNeighbors(n_neighbors=k)
+  neighbors_fit = neighbors.fit(embeddings)
+  distances, indices = neighbors_fit.kneighbors(embeddings)
 
+  # Sort the distances (k-th nearest distances)
+  distances = np.sort(distances[:, k-1], axis=0)
 
-  # print(faiss)
-  embeddings_array=np.array(embedder.embed_documents(purposes[:100])).astype('float32')
+  plt.plot(distances)
+  plt.xlabel('Data Points sorted by distance')
+  plt.ylabel(f'{k}-th Nearest Neighbor Distance')
+  plt.title('k-distance Graph')
+  plt.show()
+
+  exit()
+
+  
   # print(len(embeddings_array))
 
   # Perform DBSCAN clustering
   dbscan = DBSCAN(eps=0.5, min_samples=2, metric='euclidean')
-  cluster_assignments = dbscan.fit_predict(embeddings_array)
+  cluster_assignments = dbscan.fit_predict(embeddings)
   print(cluster_assignments)
 
   # Get unique cluster labels
