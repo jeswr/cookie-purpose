@@ -14,8 +14,6 @@ In this task, you are transforming natural language descriptions of the purpose 
 Using the given structure, please provide a list of integers corresponding to the lines of the page that match the following description. Explain the reasoning behind the answer. Select ALL relevant rows. If the description contains concepts that do not match the listed purposes, describe such concepts in the unmatchedConcepts field as granularly as possible without tying them to a specific organization.
 
 **Inputs:**
-- Name: "{name}"
-- Category: "{category}"
 - Description: "{description}"
 
 DPV Purposes:

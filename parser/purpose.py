@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from pydantic import BaseModel, Field, conlist, conint
 from langchain.output_parsers import PydanticOutputParser
 from ..prompts.purposes import purposes_doc
